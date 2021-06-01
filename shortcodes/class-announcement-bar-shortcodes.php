@@ -38,7 +38,17 @@ class Announcement_Bar_Shortcodes {
 	 */
 	public function announcement_bar_shortcode( $atts, $content = null ) {
 		ob_start();
-		if ( $this->settings->show_announcement_bar ) { ?>
+    $is_time_out = false;
+    if(isset($this->settings->enable_auto_deactivate) && $this->settings->enable_auto_deactivate){
+      date_default_timezone_set($this->settings->auto_deactivate_timezone);
+      $current_date = date("Y-m-d H:i:s");
+      $auto_deactivate_date_time = date("Y-m-d H:i:s",strtotime($this->settings->auto_deactivate_date_time));
+      if($current_date > $auto_deactivate_date_time){
+        $is_time_out = true;
+      }
+    }
+    
+		if ( $this->settings->show_announcement_bar && !$is_time_out ) { ?>
 			<div id="ab_announcement_bar" class="ab_container-fluid <?php echo (isset($this->settings->sticky) && $this->settings->sticky) ? 'ab_sticky' : ''; ?>" style="box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12); background-color: <?php echo $this->settings->background_color; ?>; display: none;">
 				<div class="ab_row">
 					<div class="ab_container container">
