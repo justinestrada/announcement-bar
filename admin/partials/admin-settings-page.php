@@ -19,6 +19,9 @@ if (  isset($_POST['action']) && $_POST['action'] === 'update_settings'  ) {
 	    'background_color' => $_POST['background_color'],
 	    'text' => htmlentities(stripslashes($_POST['text'])),
 	    'show_close_button' => ( isset($_POST['show_close_button']) ) ? true : false,
+      'enable_auto_deactivate'=>( isset($_POST['enable_auto_deactivate']) ) ? true : false,
+      'auto_deactivate_date_time' => $_POST['auto_deactivate_date_time'],
+      'auto_deactivate_timezone' => $_POST['auto_deactivate_timezone'],
 	);
 	update_option( 'ab_settings', json_encode( $settings ) );
 	$success_msg = __( 'Settings Updated.' );
@@ -28,9 +31,15 @@ if ( ! empty( $success_msg ) ) { ?>
 	<div class="notice notice-success is-dismissible">
 		<p><?php echo $success_msg; ?></p>
 	</div>
-<?php }
+<?php 
+}
 
-$settings = json_decode( get_option( 'ab_settings' ) ); ?>
+$date = new DateTime();
+$current_timeZone = $date->getTimezone();
+$tzlist = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
+
+$settings = json_decode( get_option( 'ab_settings' ) );
+?>
 
 <div class="wrap">
 	<h1>Announcement Bar</h1>
@@ -69,6 +78,28 @@ $settings = json_decode( get_option( 'ab_settings' ) ); ?>
 					<th><label for="show_close_button">Show Close Button</label></th>
 					<td>
 						<input type="checkbox" id="show_close_button" name="show_close_button" value="1" <?php echo (isset($settings->show_close_button) && $settings->show_close_button) ? 'checked': ''; ?>/> Show Close Button
+					</td>
+				</tr>
+        <tr>
+					<th><label for="auto_deactivate">Auto Deactivate</label>
+					</th>
+					<td>
+            <input type="checkbox" id="enable_auto_deactivate" name="enable_auto_deactivate" value="1" <?php echo (isset($settings->enable_auto_deactivate) && $settings->enable_auto_deactivate) ? 'checked': ''; ?>/> Enable
+            <br><br>
+						<input type="datetime-local" id="auto_deactivate_date_time" name="auto_deactivate_date_time" class="regular-text" value="<?php echo isset($settings->auto_deactivate_date_time) ? $settings->auto_deactivate_date_time: ''; ?>"/>
+            <select name="auto_deactivate_timezone" id="auto_deactivate_timezone">
+              <?php
+              foreach ($tzlist as $key => $value) {
+                $default = $current_timeZone->getName();
+                if(isset($settings->auto_deactivate_timezone)){
+                  $default = $settings->auto_deactivate_timezone;
+                }
+                ?>
+                <option value="<?php echo $value;?>" <?php echo $default == $value?'selected':'';?> ><?php echo $value;?></option>
+                <?php
+              }
+              ?>
+            </select>
 					</td>
 				</tr>
 			</tbody>
