@@ -14,8 +14,10 @@ const AdminSettings = {
   checkIfEnableAutoDeactivateCheckbox: function() {
     if ($("#enable_auto_deactivate").is(":checked")) {
       this.enableAutoDeactivate();
+      $('#auto_deactivate_date_time, #auto_deactivate_timezone').prop('required', true);
     }else{
       this.disableAutoDeactivate();
+      $('#auto_deactivate_date_time, #auto_deactivate_timezone').prop('required', false).removeAttr('required');
     }
   },
   enableAutoDeactivate: function() {

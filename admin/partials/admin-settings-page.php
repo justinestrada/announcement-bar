@@ -86,8 +86,8 @@ $settings = json_decode( get_option( 'ab_settings' ) );
 					<td>
             <input type="checkbox" id="enable_auto_deactivate" name="enable_auto_deactivate" value="1" <?php echo (isset($settings->enable_auto_deactivate) && $settings->enable_auto_deactivate) ? 'checked': ''; ?>/> Enable
             <br><br>
-						<input type="datetime-local" id="auto_deactivate_date_time" name="auto_deactivate_date_time" class="regular-text" value="<?php echo isset($settings->auto_deactivate_date_time) ? $settings->auto_deactivate_date_time: ''; ?>"/>
-            <select name="auto_deactivate_timezone" id="auto_deactivate_timezone">
+						<input type="datetime-local" id="auto_deactivate_date_time" name="auto_deactivate_date_time" class="regular-text" value="<?php echo isset($settings->auto_deactivate_date_time) ? $settings->auto_deactivate_date_time: ''; ?>" <?php echo (isset($settings->enable_auto_deactivate) && $settings->enable_auto_deactivate) ? 'required': ''; ?>/>
+            <select name="auto_deactivate_timezone" id="auto_deactivate_timezone" <?php echo (isset($settings->enable_auto_deactivate) && $settings->enable_auto_deactivate) ? 'required': ''; ?>>
               <?php
               foreach ($tzlist as $key => $value) {
                 $default = $current_timeZone->getName();
