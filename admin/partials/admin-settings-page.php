@@ -107,26 +107,3 @@ $settings = json_decode( get_option( 'ab_settings' ) );
 		<button type="submit" name="action" value="update_settings" class="button button-primary" >Save Changes</button>
 	</form>
 </div>
-
-<script>
-let enable_auto_deactivate_checkbox = jQuery("#enable_auto_deactivate");
-jQuery(window).load(function(){
-  enable_auto_deactivate_checkbox.on("change",function(){
-    check_if_enable_auto_deactivate_checkbox();
-  });
-  check_if_enable_auto_deactivate_checkbox();
-});
-function check_if_enable_auto_deactivate_checkbox(){
-  if(enable_auto_deactivate_checkbox.is(":checked")){
-    enable_auto_deactivate()
-  }else{
-    disable_auto_deactivate();
-  }
-}
-function enable_auto_deactivate(){
-  jQuery("#auto_deactivate_date_time, #auto_deactivate_timezone").css("display","block");
-}
-function disable_auto_deactivate(){
-  jQuery("#auto_deactivate_date_time, #auto_deactivate_timezone").css("display","none");
-}
-</script>
