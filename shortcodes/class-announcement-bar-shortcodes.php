@@ -66,9 +66,8 @@ class Announcement_Bar_Shortcodes {
 								</p>
 							</div>
 							<?php if ( $this->settings->show_close_button ) { ?>
-								<div class="d-none d-md-flex col-auto justify-content-end align-items-center text-right">
-									<button class="ab_dismiss_announcement" style="cursor: pointer; background: transparent; border: none;" >
-										<i class="fa fa-times fa-rotate-90 white-text"></i>
+								<div class="d-md-flex col-auto justify-content-end align-items-center text-right">
+									<button class="ab_dismiss_announcement" style="cursor: pointer;background: transparent;border: 0px;display: block;padding: 12px;" >
 									</button>
 								</div>
 							<?php } ?>
