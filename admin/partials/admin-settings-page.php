@@ -17,7 +17,7 @@ if (  isset($_POST['action']) && $_POST['action'] === 'update_settings'  ) {
 	    'show_announcement_bar' => ( isset($_POST['show_announcement_bar']) ) ? true : false,
 	    'sticky' => ( isset($_POST['sticky']) ) ? true : false,
 	    'background_color' => $_POST['background_color'],
-	    'text' => htmlentities(stripslashes($_POST['text'])),
+	    'text' =>$_POST['text'],
 	    'show_close_button' => ( isset($_POST['show_close_button']) ) ? true : false,
       'enable_auto_deactivate'=>( isset($_POST['enable_auto_deactivate']) ) ? true : false,
       'auto_deactivate_date_time' => $_POST['auto_deactivate_date_time'],
@@ -71,7 +71,13 @@ $settings = json_decode( get_option( 'ab_settings' ) );
 					<th><label for="text">Text</label>
 					</th>
 					<td>
-						<textarea rows="10" cols="100" id="text" name="text" class="regular-text" required><?php echo isset($settings->text) ? $settings->text : ''; ?></textarea>
+            <?php
+              wp_editor((isset($settings->text) ? $settings->text : ''),"text",[
+                "media_buttons"=>false,
+                "textarea_name"=>"text",
+                "textarea_rows"=>10
+              ]);
+            ?>
 					</td>
 				</tr>
 				<tr>
