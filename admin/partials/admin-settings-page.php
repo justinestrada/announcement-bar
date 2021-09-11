@@ -17,9 +17,12 @@ if (  isset($_POST['action']) && $_POST['action'] === 'update_settings'  ) {
 	    'show_announcement_bar' => ( isset($_POST['show_announcement_bar']) ) ? true : false,
 	    'sticky' => ( isset($_POST['sticky']) ) ? true : false,
 	    'background_color' => $_POST['background_color'],
-	    'text' =>$_POST['text'],
+	    'text' => htmlentities(stripslashes($_POST['text'])),
 	    'show_close_button' => ( isset($_POST['show_close_button']) ) ? true : false,
       'enable_auto_deactivate'=>( isset($_POST['enable_auto_deactivate']) ) ? true : false,
+      'enable_auto_activate'=>( isset($_POST['enable_auto_activate']) ) ? true : false,
+      'auto_activate_date_time' => $_POST['auto_activate_date_time'],
+      'auto_activate_timezone' => $_POST['auto_activate_timezone'],
       'auto_deactivate_date_time' => $_POST['auto_deactivate_date_time'],
       'auto_deactivate_timezone' => $_POST['auto_deactivate_timezone'],
 	);
@@ -53,6 +56,28 @@ $settings = json_decode( get_option( 'ab_settings' ) );
 						<input type="checkbox" id="show_announcement_bar" name="show_announcement_bar" value="1" <?php echo (isset($settings->show_announcement_bar) && $settings->show_announcement_bar) ? 'checked': ''; ?>/> Show Announcement Bar
 					</td>
 				</tr>
+        <tr>
+					<th><label for="auto_activate">Auto Activate</label>
+					</th>
+					<td>
+            <input type="checkbox" id="enable_auto_activate" name="enable_auto_activate" value="1" <?php echo (isset($settings->enable_auto_activate) && $settings->enable_auto_activate) ? 'checked': ''; ?>/> Enable
+            <br><br>
+						<input type="datetime-local" id="auto_activate_date_time" name="auto_activate_date_time" class="regular-text" value="<?php echo isset($settings->auto_activate_date_time) ? $settings->auto_activate_date_time: ''; ?>" <?php echo (isset($settings->enable_auto_activate) && $settings->enable_auto_activate) ? 'required': ''; ?>/>
+            <select name="auto_activate_timezone" id="auto_activate_timezone" <?php echo (isset($settings->enable_auto_activate) && $settings->enable_auto_activate) ? 'required': ''; ?>>
+              <?php
+              foreach ($tzlist as $key => $value) {
+                $default = $current_timeZone->getName();
+                if(isset($settings->auto_activate_timezone)){
+                  $default = $settings->auto_activate_timezone;
+                }
+                ?>
+                <option value="<?php echo $value;?>" <?php echo $default == $value?'selected':'';?> ><?php echo $value;?></option>
+                <?php
+              }
+              ?>
+            </select>
+					</td>
+				</tr>
 				<tr>
 					<th><label for="sticky">Sticky</label></th>
 					<td>
@@ -71,13 +96,7 @@ $settings = json_decode( get_option( 'ab_settings' ) );
 					<th><label for="text">Text</label>
 					</th>
 					<td>
-            <?php
-              wp_editor((isset($settings->text) ? $settings->text : ''),"text",[
-                "media_buttons"=>false,
-                "textarea_name"=>"text",
-                "textarea_rows"=>10
-              ]);
-            ?>
+						<textarea rows="10" cols="100" id="text" name="text" class="regular-text" required><?php echo isset($settings->text) ? $settings->text : ''; ?></textarea>
 					</td>
 				</tr>
 				<tr>
