@@ -41,7 +41,7 @@ class Announcement_Bar_Shortcodes
   public function announcement_bar_shortcode($atts, $content = null)
   {
     ob_start();
-    $show_bar = false;
+    $show_bar = $this->settings->show_announcement_bar;
     if (isset($this->settings->enable_auto_activate) && $this->settings->enable_auto_activate) {
       date_default_timezone_set($this->settings->auto_activate_timezone);
       $current_date = (int) strtotime(date("Y-m-d H:i:s")) * 1000;
@@ -55,7 +55,7 @@ class Announcement_Bar_Shortcodes
       $show_bar = ($current_date <= $auto_deactivate_date_time);
     }
 
-    if ($this->settings->show_announcement_bar && $show_bar) { ?>
+    if ($show_bar) { ?>
       <div id="ab_announcement_bar" class="ab_container-fluid <?php echo (isset($this->settings->sticky) && $this->settings->sticky) ? 'ab_sticky' : ''; ?>" style="box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12); background-color: <?php echo $this->settings->background_color; ?>; display: none;">
         <div class="ab_row">
           <div class="ab_container container">
@@ -69,7 +69,7 @@ class Announcement_Bar_Shortcodes
               <?php } ?>
               <div class="d-flex ab_col col justify-content-start align-items-center text-center text-md-left">
                 <p class="mb-0 white-text">
-                  <?php echo html_entity_decode($this->settings->text); ?>
+                  <?php echo htmlspecialchars_decode($this->settings->text); ?>
                 </p>
               </div>
               <?php if ($this->settings->show_close_button) { ?>
